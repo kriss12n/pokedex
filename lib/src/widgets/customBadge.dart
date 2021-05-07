@@ -10,6 +10,7 @@ class CustomBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 5),
+      width: 70,
       height: 20,
       decoration:
           BoxDecoration(color: color, borderRadius: BorderRadius.circular(50)),

@@ -40,11 +40,10 @@ class _UpDetail extends StatelessWidget {
           ),
           Row(
             children: [
-              CustomBadge(type: "Grass", color: Color(0xff5DDFC7)),
+              CustomBadge(type: "Grass"),
               SizedBox(
                 width: 10.0,
-              ),
-              CustomBadge(type: "Poison", color: Color(0xff5DDFC7))
+              )
             ],
           ),
         ],
