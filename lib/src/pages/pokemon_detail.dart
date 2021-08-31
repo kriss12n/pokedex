@@ -10,15 +10,15 @@ class PokemonDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Pokedex pokemon = ModalRoute.of(context).settings.arguments;
-
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
         color: returnBackColor(pokemon.types[0].type.name),
         child: Stack(
           children: [
             _UpDetail(pokemon),
+            _DownDetail(),
             ContainerImage(pokemon),
-            _DownDetail()
           ],
         ),
       ),
@@ -31,6 +31,8 @@ class _UpDetail extends StatelessWidget {
   _UpDetail(this.pokemon);
   @override
   Widget build(BuildContext context) {
+    final scaleFactor = MediaQuery.of(context).textScaleFactor;
+
     final double _opacityBody = Provider.of<PokedexView>(context).opacityBody;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -51,7 +53,7 @@ class _UpDetail extends StatelessWidget {
                     Text(
                       "#${pokemon.id}".toString(),
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 20 * scaleFactor,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
@@ -77,35 +79,37 @@ class ContainerImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _opacityImage = Provider.of<PokedexView>(context).opacityImage;
-    final size = MediaQuery.of(context).size;
-    print(size.height);
-    return AnimatedOpacity(
-        opacity: _opacityImage,
-        duration: Duration(milliseconds: 300),
-        child: Stack(
-          children: [
-            Align(
-              heightFactor: 2.4,
-              alignment: Alignment.center,
-              child: BackgroundAnimation(),
-            ),
-            Align(
-              heightFactor: (size.height > 900 ? 3.6 : size.height * 0.0042),
-              alignment: Alignment.center,
-              child: Container(
-                width: size.width * 0.56,
-                child: Hero(
-                  tag: pokemon.id,
-                  child: Image(
-                    image: NetworkImage(
-                        pokemon.sprites.other.officialArtwork.frontDefault),
-                    fit: BoxFit.fill,
+    return LayoutBuilder(builder: (context, constraint) {
+      return AnimatedOpacity(
+          opacity: _opacityImage,
+          duration: Duration(milliseconds: 300),
+          child: Stack(
+            children: [
+              Align(
+                heightFactor: 3.0,
+                alignment: Alignment.center,
+                child: BackgroundAnimation(),
+              ),
+              Positioned(
+                left: constraint.maxWidth * 0.25,
+                top: constraint.maxHeight * 0.39,
+                child: Container(
+                  width: constraint.maxWidth * 0.5,
+                  child: Hero(
+                    tag: pokemon.id,
+                    child: Image(
+                      image: NetworkImage(
+                          pokemon.sprites.other.officialArtwork.frontDefault),
+                      fit: BoxFit.contain,
+                      height: constraint.maxHeight * 0.25,
+                      width: constraint.maxWidth * 0.25t,
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
-        ));
+              )
+            ],
+          ));
+    });
   }
 }
 
@@ -178,6 +182,7 @@ class __DownDetailState extends State<_DownDetail>
   @override
   Widget build(BuildContext context) {
     final pokedexProvider = Provider.of<PokedexView>(context);
+
     return NotificationListener<DraggableScrollableNotification>(
       onNotification: (notification) {
         pokedexProvider.viewport = notification.extent;
@@ -208,8 +213,7 @@ class __DownDetailState extends State<_DownDetail>
 Widget getTypes(List<Type> types) {
   List<Widget> list = [];
   for (var i = 0; i < types.length; i++) {
-    list.add(
-        CustomBadge(type: types[i].type.name, color: returnBadgeColor(types)));
+    list.add(CustomBadge(types[i].type.name));
     list.add(SizedBox(
       width: 10.0,
     ));
