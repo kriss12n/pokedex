@@ -32,7 +32,7 @@ class _UpDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scaleFactor = MediaQuery.of(context).textScaleFactor;
-
+    final size = MediaQuery.of(context).size;
     final double _opacityBody = Provider.of<PokedexView>(context).opacityBody;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -65,7 +65,7 @@ class _UpDetail extends StatelessWidget {
             AnimatedOpacity(
                 opacity: _opacityBody,
                 duration: Duration(milliseconds: 300),
-                child: getTypes(pokemon.types)),
+                child: getTypes(pokemon.types, size)),
           ],
         ),
       ),
@@ -102,7 +102,7 @@ class ContainerImage extends StatelessWidget {
                           pokemon.sprites.other.officialArtwork.frontDefault),
                       fit: BoxFit.contain,
                       height: constraint.maxHeight * 0.25,
-                      width: constraint.maxWidth * 0.25t,
+                      width: constraint.maxWidth * 0.25,
                     ),
                   ),
                 ),
@@ -210,10 +210,17 @@ class __DownDetailState extends State<_DownDetail>
   }
 }
 
-Widget getTypes(List<Type> types) {
+Widget getTypes(List<Type> types, Size size) {
   List<Widget> list = [];
   for (var i = 0; i < types.length; i++) {
-    list.add(CustomBadge(types[i].type.name));
+    list.add(Container(
+        margin: EdgeInsets.only(top: 5),
+        width: size.width * 0.20,
+        height: size.height * 0.03,
+        decoration: BoxDecoration(
+            color: returnBadgeColor(types),
+            borderRadius: BorderRadius.circular(50)),
+        child: CustomBadge(types[i].type.name)));
     list.add(SizedBox(
       width: 10.0,
     ));
