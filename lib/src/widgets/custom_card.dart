@@ -54,16 +54,20 @@ class CustomCard extends StatelessWidget {
                             Column(
                               children: [
                                 for (int i = 0; i < pokemon.types.length; i++)
-                                  Container(
-                                    margin: EdgeInsets.only(top: 5),
-                                    width: constraint.maxWidth * 0.35,
-                                    height: constraint.maxHeight * 0.15,
-                                    decoration: BoxDecoration(
-                                        color: returnBadgeColor(pokemon.types),
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
-                                    child:
-                                        CustomBadge(pokemon.types[i].type.name),
+                                  FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 3, horizontal: 1),
+                                      margin: EdgeInsets.only(top: 5),
+                                      decoration: BoxDecoration(
+                                          color:
+                                              returnBadgeColor(pokemon.types),
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      child: CustomBadge(
+                                          pokemon.types[i].type.name),
+                                    ),
                                   )
                               ],
                             ),
